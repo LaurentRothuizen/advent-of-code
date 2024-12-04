@@ -5,15 +5,117 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, project_root)
 
 
+def create_grid(d):
+    w=len(d[0])
+    grid = []
+    for _ in range(3):
+        grid.append(['*' for _ in range(w+5)])
+    
+    for line in d:
+        row = ['*' for _ in range(3)]
+        for c in line.strip('\n'):
+            row.append(c)
+        row.extend(['*' for _ in range(3)])
+        grid.append(row)
+    for _ in range(3):
+        grid.append(['*' for _ in range(w+5)])
+    return grid
+
+def find_all_A(grid):
+    tuples = []
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == 'A':
+                tuples.append((i,j))
+    return tuples
+
+def find_all_X(grid):
+    tuples = []
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == 'X':
+                tuples.append((i,j))
+    return tuples
+
+def get_all_words(t,g):
+    x,y = t[0], t[1]
+    words = []
+    w = []
+    for j in range(4):
+        w.append(g[x+j][y])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x-j][y])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x][y+j])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x][y-j])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x+j][y+j])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x-j][y-j])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x-j][y+j])
+    words.append(''.join(w))
+    w = []
+    for j in range(4):
+        w.append(g[x+j][y-j])
+    words.append(''.join(w))
+    return words
+
+def has_xmas_amount(words):
+    has_xmas = 0
+    for word in words:
+        if word == 'XMAS':
+            has_xmas+=1
+    return has_xmas
+
+def amount_of_xmas(X_tup,grid):
+    words = get_all_words(X_tup,grid)
+    return has_xmas_amount(words)
+
+def has_amas_amount(A_tup,grid):
+    has_xmas = 0
+    x,y = A_tup[0], A_tup[1]
+    d1 = grid[x-1][y-1] + grid[x+1][y+1]
+    d2 = grid[x-1][y+1] + grid[x+1][y-1]
+    if d1 == 'MS' or d1 == 'SM':
+        if d2 == 'MS' or d2 == 'SM':
+            has_xmas = 1
+    return has_xmas
+
+def amount_of_amas(A_tup,grid):
+    return has_amas_amount(A_tup,grid)
+
 from utils.input_parser import read_input
 from utils.submit import submit
+
 def solve_part1(data):
-    # Solution for Part 1
-    pass
+    tot = 0
+    grid = create_grid(data)
+    X_tuples = find_all_X(grid) 
+    for X_tup in X_tuples:
+        tot  += amount_of_xmas(X_tup,grid)
+    return tot
 
 def solve_part2(data):
-    # Solution for Part 2
-    pass
+    tot=0
+    grid = create_grid(data)
+    A_tuples = find_all_A(grid)
+    for A_tup in A_tuples:
+        tot  += amount_of_amas(A_tup,grid)
+    return tot
 
 if __name__ == "__main__":
     year, day = 2024, 4
@@ -23,8 +125,8 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
-    known_test_solution_part2 = None  # Replace with the known result for part 2
+    known_test_solution_part1 = 18  # Replace with the known result for part 1
+    known_test_solution_part2 = 9  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 4, Year 2024...")

@@ -6,31 +6,25 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+from collections import Counter
+
 def create_lists(data):
-    first = []
-    second = []
-    for line in data:
-        a,b = line.split()
-        first.append(int(a))
-        second.append(int(b))
+    first = [int(a) for a, _ in (line.split() for line in data)]
+    second = [int(b) for _, b in (line.split() for line in data)]
     first.sort()
     second.sort()
     return first, second
 
 
 def solve_part1(data):
-    f,s = create_lists(data)
-    tot = 0
-    for i in range(len(f)):
-        tot += abs(f[i]-s[i])
-    return tot
+    first, second = create_lists(data)
+    return sum(abs(f - s) for f, s in zip(first, second))
 
 def solve_part2(data):
-    f,s = create_lists(data)
-    tot = 0
-    for j in f:
-        tot += s.count(j) * j
-    return tot
+    first, second = create_lists(data)
+    count_second = Counter(second)
+    return sum(count_second[j] * j for j in first)
 
 if __name__ == "__main__":
     year, day = 2024, 1
