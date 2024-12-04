@@ -11,4 +11,5 @@ def read_input(year, day, file_name="input.txt"):
     """
     file_path = os.path.join("inputs", str(year), f"day{day:02}", file_name)
     with open(file_path, 'r') as f:
-        return f.read().strip()
+        lines = f.readlines()
+        return lines

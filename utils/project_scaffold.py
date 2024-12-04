@@ -48,9 +48,15 @@ def create_solution_files(base_path, start_year, end_year):
                 with open(day_file, 'w', encoding="utf-8") as f:  # Specify utf-8 encoding
                     # Template code for each day's solution
                     f.write(f"""\
+import sys
+import os
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.insert(0, project_root)
+
+
 from utils.input_parser import read_input
 from utils.submit import submit
-
 def solve_part1(data):
     # Solution for Part 1
     pass
@@ -90,7 +96,7 @@ if __name__ == "__main__":
         print(f"❌ Error solving Part 1: {{e}}")
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is not None:
+    if part1_result is not None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day {day}, Year {year}...")
         try:
