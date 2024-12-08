@@ -93,19 +93,11 @@ if __name__ == "__main__":
     if part1_result is not None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 8, Year 2024...")
-        try:
-            test_result_part2 = solve_part2(test_data)
-            if test_result_part2 == known_test_solution_part2:
-                print("✅ Part 2 Test Passed")
-            else:
-                print(f"❌ Part 2 Test Failed: Expected {known_test_solution_part2}, Got {test_result_part2}")
-        except Exception as e:
-            print(f"❌ Part 2 Test Error: {e}")
-        
-        # Solve Part 2
-        try:
+        test_result_part2 = solve_part2(test_data)
+        if test_result_part2 == known_test_solution_part2:
+            print("✅ Part 2 Test Passed")
             part2_result = solve_part2(input_data)
             print(f"Part 2 Result: {part2_result}")
             submit(year, day, part1_result, part2_result)
-        except Exception as e:
-            print(f"❌ Error solving Part 2: {e}")
+        else:
+            raise AssertionError(f"❌ Part 2 Test Failed: Expected {known_test_solution_part2}, Got {test_result_part2}")
