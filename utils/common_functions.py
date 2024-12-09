@@ -19,6 +19,13 @@ def create_border_around_grid(original_grid_input, size=1, split=False):
 def print_grid(g):
     print('\n'.join(' '.join(str(x) for x in row) for row in g))
 
+def get_index(my_list, item):
+    try:
+        index = my_list.index(item)
+        return index
+    except ValueError:
+        return -1
+        
 def find_in_grid(grid, char):
     found = []
     for x, row in enumerate(grid):
