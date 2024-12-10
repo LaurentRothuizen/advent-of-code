@@ -13,14 +13,12 @@ def create_disk(data):
     disk = []
     numdata =list(map(int,list(data[0])))
     for index, num in enumerate(numdata):
-        print(index, num)
         if index % 2 == 0:
             subdisk = [int(index/2) for _ in range(num)]
             disk.extend(subdisk)
         if index % 2 == 1:
             subdisk = ['.' for _ in range(num)]
             disk.extend(subdisk)
-    print(disk)
     return disk
 
 def compress_disk(disk):
@@ -42,11 +40,38 @@ def compress_disk(disk):
     return disk
 
 def checksum(compressed):
-    return
+    total = 0
+    for index, number in enumerate(compressed):
+        total += index*number
+    return total
+
+def part1_faster(data):
+    # total_length = len(data)
+    # total_slots = sum([int(c) for index,c in enumerate(data) if index % 2 == 0 ])
+    # total_disk_size = sum([int(c) for c in data])
+    disk = create_disk(data)
+    print(disk)
+    print(len(disk))
+    total_slots = 0
+    for ind,c in enumerate(list(map(int,list(data[0])))):
+        if ind % 2 == 0:
+            total_slots += int(c)
+    print(total_slots)
+    queue = disk[total_slots:]
+    strippedqueue = [char for char in queue if char != '.']
+    pointer = 0
+    while len(strippedqueue) > 0:
+        if disk[pointer] == '.':
+            x=strippedqueue.pop()
+            disk[pointer] = x
+        pointer += 1
+    print(disk[:total_slots])
+    return disk[:total_slots]
 
 def solve_part1(data):
-    disk = create_disk(data)
-    compressed = compress_disk(disk)
+    # disk = create_disk(data)
+    # compressed = compress_disk(disk)
+    compressed = part1_faster(data)
     return checksum(compressed)
 
 def solve_part2(data):
@@ -62,7 +87,7 @@ if __name__ == "__main__":
     
     # Test cases (update with known solutions for the test input)
     known_test_solution_part1 = 1928  # Replace with the known result for part 1
-    known_test_solution_part2 = None  # Replace with the known result for part 2
+    known_test_solution_part2 = 2858  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 9, Year 2024...")
