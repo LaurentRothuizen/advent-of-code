@@ -1,3 +1,4 @@
+from copy import deepcopy
 import sys
 import os
 
@@ -22,9 +23,6 @@ def create_disk(data):
     return disk
 
 def compress_disk(disk):
-    # for i in range(len(disk)-1, 0):
-    #     if x := disk.find('.') > -1: 
-    #         disk[x] = disk[i]
     while True:
         print(disk)
         x = disk.pop()
@@ -42,13 +40,12 @@ def compress_disk(disk):
 def checksum(compressed):
     total = 0
     for index, number in enumerate(compressed):
+        if number == '.':
+            continue
         total += index*number
     return total
 
 def part1_faster(data):
-    # total_length = len(data)
-    # total_slots = sum([int(c) for index,c in enumerate(data) if index % 2 == 0 ])
-    # total_disk_size = sum([int(c) for c in data])
     disk = create_disk(data)
     print(disk)
     print(len(disk))
@@ -68,15 +65,46 @@ def part1_faster(data):
     print(disk[:total_slots])
     return disk[:total_slots]
 
+def shift_disk(data):
+    numdata =list(map(int,list(data[0])))
+    original_numdata = deepcopy(numdata)
+    disk = create_disk(data)
+    pointer_free = 1
+    for main_pointer in range(len(numdata)-1,0,-2):
+        if main_pointer % 1000 == 0:
+            print(main_pointer)
+        
+        continue_free_search = True
+        while continue_free_search:
+            if (numdata[pointer_free] >= original_numdata[main_pointer]):
+                starting = sum(numdata[:pointer_free])
+                range_update = original_numdata[main_pointer]
+                continue_free_search = False
+                numdata[main_pointer-1] += original_numdata[main_pointer]
+                numdata[main_pointer] -= original_numdata[main_pointer]
+                numdata[pointer_free-1] += original_numdata[main_pointer]
+                numdata[pointer_free] -= original_numdata[main_pointer]
+                #Update disk
+                start_remove = get_index(disk,int(main_pointer/2))
+                for i in range(range_update):
+                    disk[starting + i] = int(main_pointer/2)
+                    disk[start_remove + i] = '.'
+                pointer_free = -1
+                continue_free_search = False
+            pointer_free += 2
+            if pointer_free > main_pointer:
+                pointer_free = 1
+                continue_free_search = False
+    print('after', disk)
+    return disk
+
 def solve_part1(data):
-    # disk = create_disk(data)
-    # compressed = compress_disk(disk)
     compressed = part1_faster(data)
     return checksum(compressed)
 
 def solve_part2(data):
-    # Solution for Part 2
-    pass
+    compressed_2 = shift_disk(data)
+    return checksum(compressed_2)
 
 if __name__ == "__main__":
     year, day = 2024, 9
@@ -103,7 +131,7 @@ if __name__ == "__main__":
         part1_result = None
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is not None and known_test_solution_part2 is not None:
+    if part1_result is None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 9, Year 2024...")
         test_result_part2 = solve_part2(test_data)
