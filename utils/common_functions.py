@@ -45,6 +45,14 @@ def find_all_chars_in_grid_dict(grid, empty_char):
                     found[cell] = [(x,y)]
     return found
 
+def find_all_occurence_char_in_grid_list(grid, char):
+    found = []
+    for x, row in enumerate(grid):
+        for y, cell in enumerate(row):
+            if cell == char:
+                found.append((x,y))
+    return found
+
 
 # if __name__ == "__main__":
 #     year, day = 2024, 4
