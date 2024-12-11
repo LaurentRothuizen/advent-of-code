@@ -40,7 +40,7 @@ if __name__ == "__main__":
         part1_result = None
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is not None and known_test_solution_part2 is not None:
+    if part1_result is None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 13, Year 2024...")
         test_result_part2 = solve_part2(test_data)

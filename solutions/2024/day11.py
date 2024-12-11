@@ -12,7 +12,7 @@ from utils.submit import submit
 def all_gens(init, gens):
     gen = init
     for generation in range(gens):
-        print(generation)
+        print('gen: ', generation)
         new_gen = []
         for pointer, num in reversed(list(enumerate(gen))):
             if int(num) == 0:
@@ -25,15 +25,45 @@ def all_gens(init, gens):
         gen = new_gen
     return len(gen)
 
+def all_gens_dict(init_map, gens):
+    gen_dict = init_map
+    for generation in range(gens):
+        new_dict = {}
+        print('gen: ', generation)
+        for num in gen_dict:
+            if num == 0:
+                new_dict[1] = new_dict.get(1, 0) + gen_dict[0]
+            elif len(str(num)) % 2 == 0:
+                num_str = str(num)
+                x = int(num_str[:len(num_str)//2]) 
+                y = int(num_str[len(num_str)//2:])
+                new_dict[x] = new_dict.get(x, 0) + gen_dict[num]
+                new_dict[y] = new_dict.get(y, 0) + gen_dict[num]
+            else:
+                z = 2024*num
+                new_dict[z] = new_dict.get(z, 0) + gen_dict[num]
+        gen_dict = new_dict
+        # print(new_dict)
+    return sum(gen_dict.values())
+
 
 def solve_part1(data):
     # init = list(map(int,list(data[0].split(' '))))
     init = data[0].split(' ')
+    print(init)
     return all_gens(init, 25)
 
 def solve_part2(data):
-    init = data[0].split(' ')
-    return all_gens(init, 75)
+    # print( 'part1', solve_part1(data))
+    init = list(map(int,list(data[0].split(' '))))
+    input_dict = {}
+    for ini in init:
+        if ini in input_dict.keys():
+            input_dict[ini] += 1
+        else:
+            input_dict[ini] = 1
+    print(input_dict)
+    return all_gens_dict(input_dict, 75)
 
 if __name__ == "__main__":
     year, day = 2024, 11
