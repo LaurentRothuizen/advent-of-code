@@ -53,12 +53,3 @@ def find_all_occurence_char_in_grid_list(grid, char):
                 found.append((x,y))
     return found
 
-
-# if __name__ == "__main__":
-#     year, day = 2024, 4
-    
-#     # Read inputs
-#     test_data = read_input(year, day, file_name="test.txt")
-#     print_grid(test_data)
-#     print('--------------------------------------------')
-#     print_grid(create_border_around_grid(test_data, size=3, split=True))
