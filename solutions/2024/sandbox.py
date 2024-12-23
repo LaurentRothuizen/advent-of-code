@@ -252,210 +252,239 @@ import os
 #         break
 
 # day 21
-import copy
+# import copy
 
-CodeList = []
-with open("inputs/2024/day21/input.txt", "r") as data:
-    for t in data:
-        Line = t.strip()
-        CodeList.append(Line)
+# CodeList = []
+# with open("inputs/2024/day21/input.txt", "r") as data:
+#     for t in data:
+#         Line = t.strip()
+#         CodeList.append(Line)
 
-Keys = ["A"]
-for y in range(10):
-    Keys.append(str(y))
-KeypadDict = {}
-ArrowDict = {}
-KeypadLocations = {"7": (0,3), "8": (1,3), "9": (2,3), "4": (0,2), "5": (1,2), "6": (2,2), "1": (0,1), "2": (1,1), "3": (2,1), "0": (1,0), "A": (2,0)}
-ArrowLocations = {"<": (0,0), ">": (2,0), "V": (1,0), "^": (1,1), "A": (2,1)}
-Directions = {"^": (0,1), "V": (0,-1), "<": (-1,0), ">": (1,0)}
+# Keys = ["A"]
+# for y in range(10):
+#     Keys.append(str(y))
+# KeypadDict = {}
+# ArrowDict = {}
+# KeypadLocations = {"7": (0,3), "8": (1,3), "9": (2,3), "4": (0,2), "5": (1,2), "6": (2,2), "1": (0,1), "2": (1,1), "3": (2,1), "0": (1,0), "A": (2,0)}
+# ArrowLocations = {"<": (0,0), ">": (2,0), "V": (1,0), "^": (1,1), "A": (2,1)}
+# Directions = {"^": (0,1), "V": (0,-1), "<": (-1,0), ">": (1,0)}
 
-def BFSKey(Start, Finish, Type):
-    if Type == "Key":
-        Dictionary = KeypadLocations
-    else:
-        Dictionary = ArrowLocations
-    StartPoint = Dictionary[Start]
-    EndPoint = Dictionary[Finish]
-    Frontier = deque()
-    Frontier.append((0,StartPoint,""))
-    Score = None
-    ReturnList = []
+# def BFSKey(Start, Finish, Type):
+#     if Type == "Key":
+#         Dictionary = KeypadLocations
+#     else:
+#         Dictionary = ArrowLocations
+#     StartPoint = Dictionary[Start]
+#     EndPoint = Dictionary[Finish]
+#     Frontier = deque()
+#     Frontier.append((0,StartPoint,""))
+#     Score = None
+#     ReturnList = []
 
-    while Frontier:
-        Distance,Location,History = Frontier.popleft()
-        if Score != None and Distance > Score:
-            break
-        if Location == EndPoint:
-            History += "A"
-            Score = Distance
-            ReturnList.append(History)
-            continue
-        if Location not in Dictionary.values():
-            continue
+#     while Frontier:
+#         Distance,Location,History = Frontier.popleft()
+#         if Score != None and Distance > Score:
+#             break
+#         if Location == EndPoint:
+#             History += "A"
+#             Score = Distance
+#             ReturnList.append(History)
+#             continue
+#         if Location not in Dictionary.values():
+#             continue
 
-        X,Y = Location
-        for c in Directions:
-            DX,DY = Directions[c]
-            NX,NY = X+DX,Y+DY
-            NewLoc = (NX,NY)
-            if NewLoc not in Dictionary.values():
-                continue
-            NewHistory = History + c
-            Frontier.append((Distance+1,NewLoc,NewHistory))
+#         X,Y = Location
+#         for c in Directions:
+#             DX,DY = Directions[c]
+#             NX,NY = X+DX,Y+DY
+#             NewLoc = (NX,NY)
+#             if NewLoc not in Dictionary.values():
+#                 continue
+#             NewHistory = History + c
+#             Frontier.append((Distance+1,NewLoc,NewHistory))
     
-    return tuple(ReturnList)
+#     return tuple(ReturnList)
 
-for c in Keys:
-    for d in Keys:
-        KeyPair = c+d
-        if c == d:
-            KeypadDict[KeyPair] = ("A",)
-            continue
-        PathTuple = BFSKey(c,d,"Key")
-        KeypadDict[KeyPair] = PathTuple
+# for c in Keys:
+#     for d in Keys:
+#         KeyPair = c+d
+#         if c == d:
+#             KeypadDict[KeyPair] = ("A",)
+#             continue
+#         PathTuple = BFSKey(c,d,"Key")
+#         KeypadDict[KeyPair] = PathTuple
 
-for c in ArrowLocations:
-    for d in ArrowLocations:
-        KeyPair = c+d
-        if c == d:
-            ArrowDict[KeyPair] = ("A",)
-            continue
-        PathTuple = BFSKey(c,d,"Arr")
-        ArrowDict[KeyPair] = PathTuple
+# for c in ArrowLocations:
+#     for d in ArrowLocations:
+#         KeyPair = c+d
+#         if c == d:
+#             ArrowDict[KeyPair] = ("A",)
+#             continue
+#         PathTuple = BFSKey(c,d,"Arr")
+#         ArrowDict[KeyPair] = PathTuple
 
-for k in KeypadDict:
-    print(k, KeypadDict[k])
+# for k in KeypadDict:
+#     print(k, KeypadDict[k])
 
-ArrowDict["<A"] = ('>>^A',)
-ArrowDict[">^"] = ('<^A',)
-ArrowDict["VA"] =  ('^>A',)
-ArrowDict["^>"] = ('V>A',)
-ArrowDict["A<"] = ('V<<A',)
-ArrowDict["AV"] =  ('<VA',)
-for a in ArrowDict:
-    ArrowDict[a] = ArrowDict[a][0]
+# ArrowDict["<A"] = ('>>^A',)
+# ArrowDict[">^"] = ('<^A',)
+# ArrowDict["VA"] =  ('^>A',)
+# ArrowDict["^>"] = ('V>A',)
+# ArrowDict["A<"] = ('V<<A',)
+# ArrowDict["AV"] =  ('<VA',)
+# for a in ArrowDict:
+#     ArrowDict[a] = ArrowDict[a][0]
 
-for a in ArrowDict:
-    print(a, ArrowDict[a])
+# for a in ArrowDict:
+#     print(a, ArrowDict[a])
 
-print()
+# print()
 
 
-def ButtonPresses(String, Cypher, Last):
-    String = "A" + String
-    ReturnList = [""]
-    LastCount = 0
-    for t in range(len(String)-1):
-        StringPair = String[t:t+2]
-        if Cypher == "Keypad":
-            BranchTuple = KeypadDict[StringPair]
-        else:
-            NewString = ArrowDict[StringPair]
-            #print(StringPair, BranchTuple)
-        if Last:
-            LastCount += len(NewString)
-            ReturnList[0] += NewString
-            continue
-        ReturnLen = len(ReturnList)
-        NewReturnList = []
-        if Cypher == "Keypad":
-            for g in BranchTuple:
-                for r in ReturnList:
-                    NewString = r + g
-                    NewReturnList.append(NewString)
-            ReturnList = copy.deepcopy(NewReturnList)
-        else:
-            ReturnList[0] += NewString
+# def ButtonPresses(String, Cypher, Last):
+#     String = "A" + String
+#     ReturnList = [""]
+#     LastCount = 0
+#     for t in range(len(String)-1):
+#         StringPair = String[t:t+2]
+#         if Cypher == "Keypad":
+#             BranchTuple = KeypadDict[StringPair]
+#         else:
+#             NewString = ArrowDict[StringPair]
+#             #print(StringPair, BranchTuple)
+#         if Last:
+#             LastCount += len(NewString)
+#             ReturnList[0] += NewString
+#             continue
+#         ReturnLen = len(ReturnList)
+#         NewReturnList = []
+#         if Cypher == "Keypad":
+#             for g in BranchTuple:
+#                 for r in ReturnList:
+#                     NewString = r + g
+#                     NewReturnList.append(NewString)
+#             ReturnList = copy.deepcopy(NewReturnList)
+#         else:
+#             ReturnList[0] += NewString
         
-    if Last:
-        return LastCount, ReturnList  
-    return tuple(ReturnList)
+#     if Last:
+#         return LastCount, ReturnList  
+#     return tuple(ReturnList)
 
 
-Part2Dict = {}
-for a in ArrowDict:
-    NewList = []
-    String = ArrowDict[a]
-    if len(String) == 1:
-        Part2Dict[a] = ("AA",)
-        continue
-    for t in range(len(ArrowDict[a])):
-        if t == 0:
-            Substring = "A" + String[0]
-        else:
-            Substring = String[t-1:t+1]
-        NewList.append(Substring)
-        Part2Dict[a] = tuple(NewList)
+# Part2Dict = {}
+# for a in ArrowDict:
+#     NewList = []
+#     String = ArrowDict[a]
+#     if len(String) == 1:
+#         Part2Dict[a] = ("AA",)
+#         continue
+#     for t in range(len(ArrowDict[a])):
+#         if t == 0:
+#             Substring = "A" + String[0]
+#         else:
+#             Substring = String[t-1:t+1]
+#         NewList.append(Substring)
+#         Part2Dict[a] = tuple(NewList)
 
-print(Part2Dict)
-print()
+# print(Part2Dict)
+# print()
 
-Part1Answer = 0
-Part2Answer = 0
+# Part1Answer = 0
+# Part2Answer = 0
 
-for Code in CodeList:
-    FirstSet = set(ButtonPresses(Code, "Keypad", False))
+# for Code in CodeList:
+#     FirstSet = set(ButtonPresses(Code, "Keypad", False))
 
-    SecondSet = set()
-    for c in FirstSet:
-        NewSet = set(ButtonPresses(c, "Arrows", False))
-        SecondSet = SecondSet | NewSet
+#     SecondSet = set()
+#     for c in FirstSet:
+#         NewSet = set(ButtonPresses(c, "Arrows", False))
+#         SecondSet = SecondSet | NewSet
 
-    MinLength = 1000
-    ThirdSet = set()
-    for c in SecondSet:
-        NewLen, String = ButtonPresses(c, "Arrows", True)
-        if NewLen < MinLength:
-            SecondC = c
-            MinLength = NewLen
-            ThirdSet = set()
-            ThirdSet.add(c)
-        elif NewLen == MinLength:
-            ThirdSet.add(c)
+#     MinLength = 1000
+#     ThirdSet = set()
+#     for c in SecondSet:
+#         NewLen, String = ButtonPresses(c, "Arrows", True)
+#         if NewLen < MinLength:
+#             SecondC = c
+#             MinLength = NewLen
+#             ThirdSet = set()
+#             ThirdSet.add(c)
+#         elif NewLen == MinLength:
+#             ThirdSet.add(c)
     
     
-    FinalLen = 1000**100
-    for f in ThirdSet:
+#     FinalLen = 1000**100
+#     for f in ThirdSet:
     
-        CodeDict = {}
-        for a in ArrowDict:
-            CodeDict[a] = 0
-        NewString = ButtonPresses(f, "Arrows", False)[0]
-        for t in range(len(NewString)-1):
-            SubString = NewString[t:t+2]
-            CodeDict[SubString] += 1
-        FirstLetter = NewString[0]
-        print(NewString)
-        print(CodeDict)
+#         CodeDict = {}
+#         for a in ArrowDict:
+#             CodeDict[a] = 0
+#         NewString = ButtonPresses(f, "Arrows", False)[0]
+#         for t in range(len(NewString)-1):
+#             SubString = NewString[t:t+2]
+#             CodeDict[SubString] += 1
+#         FirstLetter = NewString[0]
+#         print(NewString)
+#         print(CodeDict)
 
-        for u in range(23):
-            NewDict = {}
-            for a in ArrowDict:
-                NewDict[a] = 0
-            FirstString = "A" + FirstLetter
-            CodeDict[FirstString] += 1
-            FirstLetter = Part2Dict[FirstString][0][1]
-            RemoveString = Part2Dict[FirstString][0]
-            for c in CodeDict:
-                for g in Part2Dict[c]:
-                    NewDict[g] += CodeDict[c]
-            NewDict[RemoveString] -= 1
-            CodeDict = NewDict.copy()
+#         for u in range(23):
+#             NewDict = {}
+#             for a in ArrowDict:
+#                 NewDict[a] = 0
+#             FirstString = "A" + FirstLetter
+#             CodeDict[FirstString] += 1
+#             FirstLetter = Part2Dict[FirstString][0][1]
+#             RemoveString = Part2Dict[FirstString][0]
+#             for c in CodeDict:
+#                 for g in Part2Dict[c]:
+#                     NewDict[g] += CodeDict[c]
+#             NewDict[RemoveString] -= 1
+#             CodeDict = NewDict.copy()
 
-        NewLen = sum(CodeDict.values())+1
-        print(NewLen)
-        if NewLen < FinalLen:
-            FinalLen = NewLen
+#         NewLen = sum(CodeDict.values())+1
+#         print(NewLen)
+#         if NewLen < FinalLen:
+#             FinalLen = NewLen
 
-    Integer = int(Code[:-1])
+#     Integer = int(Code[:-1])
 
-    print(ButtonPresses(SecondC, "Arrows", False)[0])
-    print(MinLength, Integer, MinLength*Integer)
-    print(FinalLen, Integer, FinalLen*Integer)
-    print()
-    Part1Answer += Integer * MinLength
-    Part2Answer += Integer * FinalLen
+#     print(ButtonPresses(SecondC, "Arrows", False)[0])
+#     print(MinLength, Integer, MinLength*Integer)
+#     print(FinalLen, Integer, FinalLen*Integer)
+#     print()
+#     Part1Answer += Integer * MinLength
+#     Part2Answer += Integer * FinalLen
 
 
-print(f"{Part1Answer = }")
-print(f"{Part2Answer = }")
+# print(f"{Part1Answer = }")
+# print(f"{Part2Answer = }")
+
+# day 22
+
+import numpy as np
+nums = [int(x) for x in open('inputs/2024/day22/input.txt').read().split('\n')]
+m = 16777216
+repeats = 2000
+total = 0
+memos = {}
+for x in nums: 
+    seq = np.zeros(repeats + 1, dtype = int)
+    seq[0] = x % 10
+    for j in range(1, repeats + 1):
+        x = (x ^ (x * 64)) % m
+        x = (x ^ (x // 32)) % m
+        x = (x ^ (x * 2048)) % m
+        seq[j] =  x % 10
+    total += x
+    diffs = np.diff(seq)
+    seen = set()
+    for p in range(4,len(diffs)):
+        h = tuple(diffs[p-3:p+1])
+        if h not in memos and h not in seen:
+            memos[h] = seq[p + 1]
+        elif h not in seen:
+            memos[h] += seq[p + 1]
+        seen.add(h)
+print('Part 1:', total)
+print('Part 2: ', max(memos.values()))
