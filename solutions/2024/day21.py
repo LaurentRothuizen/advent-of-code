@@ -1,5 +1,6 @@
 import sys
 import os
+from tkinter import Grid
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, project_root)
@@ -7,9 +8,16 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+def parse_input(data):
+    return ['A' + l.strip('\n') for l in data]
+
+def calc_complexity(code, length_intstructions):
+    return int(code.strip('A')) * length_intstructions
+    
 def solve_part1(data):
-    # Solution for Part 1
-    pass
+    # see sandbox
+    return
 
 def solve_part2(data):
     # Solution for Part 2
@@ -23,7 +31,7 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
+    known_test_solution_part1 = 126384  # Replace with the known result for part 1
     known_test_solution_part2 = None  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
