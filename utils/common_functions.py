@@ -1,5 +1,11 @@
+from enum import Enum
 import math
 
+class Direction(Enum):
+    UP = (-1, 0)
+    RIGHT = (0, 1)
+    DOWN = (1, 0)
+    LEFT = (0, -1)
 
 def create_border_around_grid(original_grid_input, size=1, split=False):
     # Ensure grid is a list of lists
