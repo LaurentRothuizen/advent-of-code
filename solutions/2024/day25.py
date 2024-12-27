@@ -7,9 +7,51 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+def build_lock(build):
+    key = [0]*5
+    for l in build[1:]:
+        for index, char in enumerate(l):
+            if char == '#':
+                key[index] += 1
+    return key
+
+def parse_input(data):
+    locks, keys = [], []
+    lock = False if data[0] == '.....\n' else True
+    build = []
+    for index, line in enumerate(data):
+        if line == '\n':
+            if lock:
+                lock_build = build_lock(build)
+                locks.append(lock_build)
+            else: 
+                key_build = build_lock(list(reversed(build)))
+                keys.append(key_build)
+            build = []
+            if data[index + 1] == '.....\n':
+                lock = False
+            elif data[index + 1] == '#####\n':
+                lock = True
+        else:
+            build.append(line.strip('\n'))
+            
+    if lock:
+        lock_build = build_lock(build)
+        locks.append(lock_build)
+    else: 
+        key_build = build_lock(list(reversed(build)))
+        keys.append(key_build)
+    return locks, keys
+
 def solve_part1(data):
-    # Solution for Part 1
-    pass
+    locks, keys = parse_input(data)
+    unique = 0
+    for lock in locks:
+        for key in keys:
+            if max([sum(x) for x in zip(lock, key)]) <= 5:
+                unique += 1            
+    return unique
 
 def solve_part2(data):
     # Solution for Part 2
@@ -23,7 +65,7 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
+    known_test_solution_part1 = 3  # Replace with the known result for part 1
     known_test_solution_part2 = None  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
