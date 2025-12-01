@@ -27,7 +27,7 @@ if __name__ == "__main__":
     known_test_solution_part2 = None  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
-    print(f"Testing Part 1 for Day 18, Year 2016...")
+    print(f"Testing Part 1 for Day 18, Year 2025...")
     if known_test_solution_part2 is None:
         test_result_part1 = solve_part1(test_data)
         if test_result_part1 == known_test_solution_part1:
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # Only proceed to Part 2 if Part 1 is implemented and working
     if part1_result is None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
-        print(f"Testing Part 2 for Day 18, Year 2016...")
+        print(f"Testing Part 2 for Day 18, Year 2025...")
         test_result_part2 = solve_part2(test_data)
         if test_result_part2 == known_test_solution_part2:
             print("✅ Part 2 Test Passed")
