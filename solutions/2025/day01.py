@@ -7,41 +7,36 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+def parse_instructions(data):
+    """Convert instructions like 'R12' or 'L5' into signed integers."""
+    return [int(line[1:]) * (1 if line[0] == 'R' else -1) for line in data]
+
+
 def solve_part1(data):
-    count = 0
     dial = 50
-    instructions = [int(x.strip('\n')[1:]) if x.strip('\n')[0] == 'R' else -int(x.strip('\n')[1:]) for x in data] 
+    count = 0
+    instructions = parse_instructions(data)
+
     for inst in instructions:
         dial = (dial + inst) % 100
         if dial == 0:
-            count+=1
-    return count
+            count += 1
 
-def past_100(dial, inst):
-    temp = abs(inst) // 100
-    if dial == 0:
-        print('0', dial, inst, abs(inst) // 100, temp)
-        return temp
-    new_dial = dial + inst
-    if new_dial < 0 and new_dial + temp * 100 < 0:
-        temp += 1
-    elif new_dial > 100 and new_dial - temp * 100 > 100: #and (dial + inst) % 100 != 0 and dial + inst - temp * 100 > 100
-        temp += 1
-    print(dial, inst, abs(inst) // 100, temp)
-    return temp
+    return count
 
 def solve_part2(data):
-    count = 0
     dial = 50
-    instructions = [int(x.strip('\n')[1:]) if x.strip('\n')[0] == 'R' else -int(x.strip('\n')[1:]) for x in data] 
-    for inst in instructions:
-        count_temp = past_100(dial, inst)
-        dial = (dial + inst) % 100
-        if dial == 0:
-            count_temp+=1
-        print('count_temp', count_temp)
-        count += count_temp
-    return count
+    total = 0
+    for inst in parse_instructions(data):
+        start = dial
+        end = dial + inst
+
+        # Number of multiples of 100 in the interval (start, end] or (end, start]
+        crossed = abs(end // 100 - start // 100)
+        total += crossed
+        dial = end % 100
+
+    return total
 
 if __name__ == "__main__":
     year, day = 2025, 1
@@ -53,7 +48,7 @@ if __name__ == "__main__":
     # Test cases (update with known solutions for the test input)
     known_test_solution_part1 = 3  # Replace with the known result for part 1
     known_test_solution_part2 = 6  # Replace with the known result for part 2
-    # 7207, 6971, 6985, 6768
+    #part1_result = 1177
     #part2_result = 6768
     
     # Verify test cases for Part 1
