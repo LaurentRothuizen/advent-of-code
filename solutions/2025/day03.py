@@ -7,9 +7,40 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+def calc_bank(bank):
+    print(bank)
+    check_val = 9
+    found_first = False
+    result1 = 0
+    result2 = 0
+    first_round = True
+    while check_val > 0:
+        value_first_bat = str(check_val)
+        if not found_first:
+            result1 = bank.find(value_first_bat,0,len(bank)-1)
+        if 0 <= result1:
+            found_first = True
+            if first_round:
+                first_round = False
+                check_val = 9
+                value_first_bat = str(check_val)
+            result2 = bank.find(value_first_bat, result1+1, len(bank))
+            if 0 <= result2:
+                print(bank[result1], bank[result2])
+                break
+            else:
+                check_val -= 1
+        else:
+            check_val -= 1
+    return int(bank[result1] + bank[result2])
+
 def solve_part1(data):
-    # Solution for Part 1
-    pass
+    banks = [d.strip('\n') for d in data]
+    tot = 0
+    for bank in banks:
+        tot += calc_bank(bank)
+    return tot
 
 def solve_part2(data):
     # Solution for Part 2
@@ -23,8 +54,8 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
-    known_test_solution_part2 = None  # Replace with the known result for part 2
+    known_test_solution_part1 = 357  # Replace with the known result for part 1 17107
+    known_test_solution_part2 = 3121910778619  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 3, Year 2025...")
@@ -37,10 +68,10 @@ if __name__ == "__main__":
         else:
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
-        part1_result = None
+        part1_result = 17107
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is None and known_test_solution_part2 is not None:
+    if part1_result is not None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 3, Year 2025...")
         test_result_part2 = solve_part2(test_data)
