@@ -8,73 +8,58 @@ sys.path.insert(0, project_root)
 from utils.input_parser import read_input
 from utils.submit import submit
 
-def calc_bank(bank):
-    print(bank)
-    check_val = 9
-    found_first = False
-    result1 = 0
-    result2 = 0
-    first_round = True
-    while check_val > 0:
-        value_first_bat = str(check_val)
-        if not found_first:
-            result1 = bank.find(value_first_bat,0,len(bank)-1)
-        if 0 <= result1:
-            found_first = True
-            if first_round:
-                first_round = False
-                check_val = 9
-                value_first_bat = str(check_val)
-            result2 = bank.find(value_first_bat, result1+1, len(bank))
-            if 0 <= result2:
-                print(bank[result1], bank[result2])
-                break
-            else:
-                check_val -= 1
-        else:
-            check_val -= 1
-    return int(bank[result1] + bank[result2])
+def best_two_digits(bank: str) -> int:
+    """
+    Efficient Part 1 solution:
+    1. Find the maximum digit in bank[0 : n-1].
+    2. Then find the maximum digit in bank[i+1 : n].
+    """
+    digits = list(bank)
+
+    # Step 1: find max in the first n-1 digits
+    first_max = max(digits[:-1])
+    i = digits.index(first_max)  # earliest occurrence (best choice)
+
+    # Step 2: find max in the remaining digits bank[i+1:]
+    second_max = max(digits[i+1:])
+
+    return int(first_max + second_max)
+
 
 def solve_part1(data):
-    banks = [d.strip('\n') for d in data]
-    tot = 0
-    for bank in banks:
-        tot += calc_bank(bank)
-    return tot
+    banks = [line.strip() for line in data]
+    return sum(best_two_digits(bank) for bank in banks)
 
-def find_max_value_in_substring(bank_list, stop_index):
-    print('bank_list_reduced', bank_list[:stop_index])
-    maxval = max(bank_list[:stop_index])
-    print(maxval)
-    return str(maxval)
+def calc_bank_twelve(bank: str) -> int:
+    digits = list(map(int, bank))
+    n = len(digits)
+    k = 12
+    result = []
 
-def calc_bank_twelve(bank):
-    tot_string = ''
-    digits_left = 12
-    bank_list = list(map(int, bank))
-    start_index = 0
-    stop_index = len(bank_list) - digits_left + 1
-    while digits_left > 0:
-        value = find_max_value_in_substring(bank_list, stop_index)
-        tot_string += value
-        digits_left -= 1
-        print('prestart', bank_list[start_index:])
-        start_index = bank_list.index(int(value))
-        bank_list[:start_index+1] = [0] * (len(bank_list[:start_index])+1)
-        stop_index = len(bank) - digits_left + 1
-        print('bank_list', bank_list)
-        print('end iter \n')
-    print(tot_string)
-    return int(tot_string)
+    start = 0
+
+    for remaining in range(k, 0, -1):
+        # The right boundary of the search window
+        end = n - remaining
+
+        # Find the max digit in digits[start : end+1]
+        window = digits[start:end+1]
+        max_digit = max(window)
+
+        # Find the FIRST occurrence of that max digit in the window
+        idx = window.index(max_digit) + start
+
+        # Append result
+        result.append(str(max_digit))
+
+        # Move start just after the chosen digit
+        start = idx + 1
+
+    return int("".join(result))
+
 
 def solve_part2(data):
-    banks = [d.strip('\n') for d in data]
-    tot = 0
-    for bank in banks:
-        tot += calc_bank_twelve(bank)
-    print(tot)
-    return tot
-
+    return sum(calc_bank_twelve(line.strip()) for line in data)
 
 if __name__ == "__main__":
     year, day = 2025, 3
@@ -99,6 +84,7 @@ if __name__ == "__main__":
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
         part1_result = 17107
+        #part2_result = 169349762274117
 
     # Only proceed to Part 2 if Part 1 is implemented and working
     if part1_result is not None and known_test_solution_part2 is not None:

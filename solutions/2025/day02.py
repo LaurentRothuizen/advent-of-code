@@ -9,42 +9,51 @@ sys.path.insert(0, project_root)
 from utils.input_parser import read_input
 from utils.submit import submit
 
-def all_in_range(start, end):
-    tot = 0
-    if len(start) == len(end) and len(start) % 2 != 0:
-        return 0
-    for num in range(int(start),int(end)+1):
-        x = str(num)
-        if x[:len(x)//2] == x[len(x)//2:]:
-            tot += num
-            print(x)
-    return tot
+def parse_ranges(data):
+    """Parse '10-200,300-5000' into [(10,200),(300,5000)]."""
+    return [
+        (int(a), int(b))
+        for a, b in (r.split('-') for r in data[0].split(','))
+    ]
+
+# --------------------------
+# PART 1 — double numbers
+# --------------------------
+
+def is_double_number(n: int) -> bool:
+    s = str(n)
+    if len(s) % 2 != 0:
+        return False
+    mid = len(s) // 2
+    return s[:mid] == s[mid:]
+
 
 def solve_part1(data):
-    ranges = [x.split('-') for x in data[0].split(',')]
-    print(ranges)
     total = 0
-    for r in ranges:
-        total += all_in_range(r[0],r[1])
+    for start, end in parse_ranges(data):
+        for n in range(start, end + 1):
+            if is_double_number(n):
+                total += n
     return total
 
-def check_repeat_pattern(num, x):
-    if bool(re.fullmatch(r"(.+)\1+", x)):
-        return num
-    return 0
 
-def all_in_range_part2(start, end):
-    tot = 0
-    for num in range(int(start),int(end)+1):
-        tot += check_repeat_pattern(num, str(num))
-    return tot
+# --------------------------
+# PART 2 — repeated patterns
+# --------------------------
+
+re_pattern = re.compile(r"(.+)\1+")
+
+
+def is_repetition(n: int) -> bool:
+    return bool(re_pattern.fullmatch(str(n)))
+
 
 def solve_part2(data):
-    ranges = [x.split('-') for x in data[0].split(',')]
-    print(ranges)
     total = 0
-    for r in ranges:
-        total += all_in_range_part2(r[0],r[1])
+    for start, end in parse_ranges(data):
+        for n in range(start, end + 1):
+            if is_repetition(n):
+                total += n
     return total
 
 if __name__ == "__main__":

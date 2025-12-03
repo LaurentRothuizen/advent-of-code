@@ -48,8 +48,6 @@ if __name__ == "__main__":
     # Test cases (update with known solutions for the test input)
     known_test_solution_part1 = 3  # Replace with the known result for part 1
     known_test_solution_part2 = 6  # Replace with the known result for part 2
-    #part1_result = 1177
-    #part2_result = 6768
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 1, Year 2025...")
@@ -63,6 +61,7 @@ if __name__ == "__main__":
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
         part1_result = 1177
+        #part2_result = 6768
 
     # Only proceed to Part 2 if Part 1 is implemented and working
     if part1_result is not None and known_test_solution_part2 is not None:
