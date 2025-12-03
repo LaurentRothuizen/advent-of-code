@@ -42,9 +42,39 @@ def solve_part1(data):
         tot += calc_bank(bank)
     return tot
 
+def find_max_value_in_substring(bank_list, stop_index):
+    print('bank_list_reduced', bank_list[:stop_index])
+    maxval = max(bank_list[:stop_index])
+    print(maxval)
+    return str(maxval)
+
+def calc_bank_twelve(bank):
+    tot_string = ''
+    digits_left = 12
+    bank_list = list(map(int, bank))
+    start_index = 0
+    stop_index = len(bank_list) - digits_left + 1
+    while digits_left > 0:
+        value = find_max_value_in_substring(bank_list, stop_index)
+        tot_string += value
+        digits_left -= 1
+        print('prestart', bank_list[start_index:])
+        start_index = bank_list.index(int(value))
+        bank_list[:start_index+1] = [0] * (len(bank_list[:start_index])+1)
+        stop_index = len(bank) - digits_left + 1
+        print('bank_list', bank_list)
+        print('end iter \n')
+    print(tot_string)
+    return int(tot_string)
+
 def solve_part2(data):
-    # Solution for Part 2
-    pass
+    banks = [d.strip('\n') for d in data]
+    tot = 0
+    for bank in banks:
+        tot += calc_bank_twelve(bank)
+    print(tot)
+    return tot
+
 
 if __name__ == "__main__":
     year, day = 2025, 3
@@ -55,7 +85,7 @@ if __name__ == "__main__":
     
     # Test cases (update with known solutions for the test input)
     known_test_solution_part1 = 357  # Replace with the known result for part 1 17107
-    known_test_solution_part2 = 3121910778619  # Replace with the known result for part 2
+    known_test_solution_part2 = 3121910778619  # Replace with the known result for part 2 169349762274117
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 3, Year 2025...")
