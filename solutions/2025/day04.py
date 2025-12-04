@@ -23,7 +23,7 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
+    known_test_solution_part1 = 13  # Replace with the known result for part 1
     known_test_solution_part2 = None  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
