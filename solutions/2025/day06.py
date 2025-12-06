@@ -1,3 +1,4 @@
+import math
 import sys
 import os
 
@@ -7,9 +8,34 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+def parse_input(data):
+    ops = data[-1].split()
+    lines = []
+    exs = []
+    for line in data[:-1]:
+        lines.append(list(map(int, line.split())))
+    print(lines)
+    print(ops)
+    for i in range(len(ops)):
+        ex = []
+        ex.append(ops[i])
+        for j in lines:
+            ex.append(j[i])
+        exs.append(ex)
+    return exs
+
 def solve_part1(data):
-    # Solution for Part 1
-    pass
+    exs = parse_input(data)
+    print(exs)
+    total = 0
+    for ex in exs:
+        if ex[0] == "*":
+            total += math.prod(e for e in ex[1:])
+        else :
+            total += sum(e for e in ex[1:])
+    print(total)
+    return total
 
 def solve_part2(data):
     # Solution for Part 2
@@ -23,8 +49,8 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
-    known_test_solution_part2 = None  # Replace with the known result for part 2
+    known_test_solution_part1 = 4277556  # Replace with the known result for part 1
+    known_test_solution_part2 = 3263827  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 6, Year 2025...")
@@ -37,10 +63,11 @@ if __name__ == "__main__":
         else:
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
-        part1_result = None
+        part1_result = 5316572080628
+        #part2_result =
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is None and known_test_solution_part2 is not None:
+    if part1_result is not None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 6, Year 2025...")
         test_result_part2 = solve_part2(test_data)
