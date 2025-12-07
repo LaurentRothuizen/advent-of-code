@@ -37,9 +37,33 @@ def solve_part1(data):
     print(total)
     return total
 
+def parse_input_blocks(data):
+    print(data)
+    ops = data[-1].split()
+    blocks = []
+    start_block = 0
+    for i in range(len(data[0])):
+        if all(data[j][i] == ' ' or data[j][i] == '\n' for j in range(len(data[:-1]))):
+            blocks.append([row[start_block:i] for row in data[:-1]])
+            start_block = i + 1    
+    return list(zip(ops,blocks))
+
 def solve_part2(data):
-    # Solution for Part 2
-    pass
+    exs = parse_input_blocks(data)
+    print(exs)
+    total=0
+    for ex in exs:
+        nums = []
+        word_length = len(ex[1][0])
+        for i in range(word_length):
+            nums.append(''.join(ex[1][j][i] for j in range(len(ex[1]))).strip())
+        print('nums', nums)
+        if ex[0] == "*":
+            total += math.prod(e for e in list(map(int,nums)))
+        else :
+            total += sum(e for e in list(map(int,nums)))
+        print(total)
+    return total
 
 if __name__ == "__main__":
     year, day = 2025, 6
@@ -64,7 +88,7 @@ if __name__ == "__main__":
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
         part1_result = 5316572080628
-        #part2_result =
+        #part2_result = 11299263623062
 
     # Only proceed to Part 2 if Part 1 is implemented and working
     if part1_result is not None and known_test_solution_part2 is not None:
