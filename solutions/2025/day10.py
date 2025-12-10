@@ -1,3 +1,4 @@
+import itertools
 import sys
 import os
 
@@ -12,14 +13,60 @@ def make_instructions(d):
     instruction_list = [x.strip('(').strip(')').split(',') for x in d]
     return [list(map(int, x)) for x in instruction_list]
 
+def reduceMod2(l):
+    return [i % 2 for i in l]
+
 def solve_part1(data):
-    machines = [(d.split()[0][1:-1], make_instructions(d.split()[1:-1]), d.split()[-1].strip('\n')) for d in data]
-    print(machines[0])
-    pass
+    machines = [(d.split()[0][1:-1], make_instructions(d.split()[1:-1]),list(map(int,d.split()[-1].strip('\n')[1:-1].split(',')))) for d in data]
+    print(machines)
+    total = 0
+    for m in machines:
+        target = [ 1 if char == '#' else 0 for char in m[0]]
+        print(target)
+        for button_size in range(1, len(m[1])):
+            print(button_size)
+            all_perms = list(itertools.combinations(range(len(m[1])), button_size))
+            for perm in all_perms:
+                found = False
+                start = [0] * len(m[2])
+                for press_button in perm:
+                    for y in m[1][press_button]:
+                        start[y] += 1
+                check = reduceMod2(start)
+                if check == target:
+                    print(button_size)
+                    total += button_size
+                    found = True
+                    break
+            if found:
+                break 
+    return total  
 
 def solve_part2(data):
-    # Solution for Part 2
-    pass
+    machines = [(d.split()[0][1:-1], make_instructions(d.split()[1:-1]),list(map(int,d.split()[-1].strip('\n')[1:-1].split(',')))) for d in data]
+    print(machines)
+    total = 0
+    for idx, m in enumerate(machines):
+        target = m[2]
+        print(idx, len(machines))
+        for button_size in range(1, len(m[1])*10):
+            print(button_size)
+            all_perms = list(itertools.combinations_with_replacement(range(len(m[1])), button_size))
+            for perm in all_perms:
+                found = False
+                start = [0] * len(m[2])
+                for press_button in perm:
+                    for y in m[1][press_button]:
+                        start[y] += 1
+                check = start
+                if check == target:
+                    print(idx, button_size)
+                    total += button_size
+                    found = True
+                    break
+            if found:
+                break 
+    return total  
 
 if __name__ == "__main__":
     year, day = 2025, 10
@@ -30,7 +77,7 @@ if __name__ == "__main__":
     
     # Test cases (update with known solutions for the test input)
     known_test_solution_part1 = 7  # Replace with the known result for part 1
-    known_test_solution_part2 = None  # Replace with the known result for part 2
+    known_test_solution_part2 = 33  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
     print(f"Testing Part 1 for Day 10, Year 2025...")
@@ -43,10 +90,11 @@ if __name__ == "__main__":
         else:
             raise AssertionError(f"❌ Part 1 Test Failed: Expected {known_test_solution_part1}, Got {test_result_part1}")
     else:
-        part1_result = None
+        part1_result = 469
+        #part2_result = 
 
     # Only proceed to Part 2 if Part 1 is implemented and working
-    if part1_result is None and known_test_solution_part2 is not None:
+    if part1_result is not None and known_test_solution_part2 is not None:
         # Verify test cases for Part 2
         print(f"Testing Part 2 for Day 10, Year 2025...")
         test_result_part2 = solve_part2(test_data)
