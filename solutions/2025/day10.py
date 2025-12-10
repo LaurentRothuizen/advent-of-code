@@ -7,8 +7,14 @@ sys.path.insert(0, project_root)
 
 from utils.input_parser import read_input
 from utils.submit import submit
+
+def make_instructions(d):
+    instruction_list = [x.strip('(').strip(')').split(',') for x in d]
+    return [list(map(int, x)) for x in instruction_list]
+
 def solve_part1(data):
-    # Solution for Part 1
+    machines = [(d.split()[0][1:-1], make_instructions(d.split()[1:-1]), d.split()[-1].strip('\n')) for d in data]
+    print(machines[0])
     pass
 
 def solve_part2(data):
@@ -23,7 +29,7 @@ if __name__ == "__main__":
     test_data = read_input(year, day, file_name="test.txt")
     
     # Test cases (update with known solutions for the test input)
-    known_test_solution_part1 = None  # Replace with the known result for part 1
+    known_test_solution_part1 = 7  # Replace with the known result for part 1
     known_test_solution_part2 = None  # Replace with the known result for part 2
     
     # Verify test cases for Part 1
